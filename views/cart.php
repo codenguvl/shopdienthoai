@@ -70,17 +70,17 @@ foreach ($cart_items as $cart_item) {
   $total_price += $item_total_price;
 
   echo "<tr>
-    <td>$product_name</td>
-    <td>$$product_price</td>
-    <td>$quantity</td> 
-    <td>$item_total_price đ</td>
-    <td>
-      <form action=\"\" method=\"post\" style=\"display: inline;\">
-        <input type=\"hidden\" name=\"remove_product_id\" value=\"$product_id\">
-        <button type=\"submit\" class=\"btn btn-danger btn-sm\">Xóa</button>
-      </form>
-    </td>
-  </tr>";
+  <td>$product_name</td>
+  <td>" . number_format($product_price, 3, ',', '.') . " đ</td>
+  <td>$quantity</td>
+  <td>" . number_format($item_total_price, 3, ',', '.') . " đ</td>
+  <td>
+    <form action=\"\" method=\"post\" style=\"display: inline;\">
+      <input type=\"hidden\" name=\"remove_product_id\" value=\"$product_id\">
+      <button type=\"submit\" class=\"btn btn-danger btn-sm\">Xóa</button>
+    </form>
+  </td>
+</tr>";
 }
 
 echo '</tbody>
@@ -96,7 +96,7 @@ echo '</tbody>
           <div class="card-body">
             <h5 class="card-title">Tổng giá trị giỏ hàng</h5>
             <hr>
-            <p class="card-text">Tổng: ' . $total_price . 'đ</p>
+            <p class="card-text">Tổng: ' . number_format($total_price, 3, ',', '.') . 'đ</p>
             <a href="#" class="btn btn-dark">Thanh toán</a>
           </div>
         </div>

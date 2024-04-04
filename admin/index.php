@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+  header('Location: login.php');
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +20,8 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -41,12 +52,6 @@ switch ($current_page) {
     case 'view-product':
         include '../views/admin/view-product.php';
         break;
-    case 'view-unapproved-order':
-        include '../views/admin/view-unapproved-order.php';
-        break;
-    case 'view-order-approved':
-        include '../views/admin/view-order-approved.php';
-        break;
     case 'add-account':
         include '../views/admin/add-account.php';
         break;
@@ -62,11 +67,14 @@ switch ($current_page) {
     case 'add-cate':
         include '../views/admin/add-cate.php';
         break;
-    case 'order-detail':
-        include '../views/admin/order-detail-admin.php';
-        break;
     case 'register':
         include 'views/register.php';
+        break;
+    case 'login':
+        include '../views/admin/login.php';
+        break; 
+    case 'view-comment':
+        include '../views/admin/view-comment.php';
         break;  
     default:
         include '../views/admin/statistic.php'; 

@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <div class="container px-4 px-lg-5">
         <div class="row align-items-center">
             <div class="col-md-3 mb-3">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form action="index.php?page=search" method="post" class="d-flex">
+                    <input class="form-control me-2" type="search" name="search_term" placeholder="Search products"
+                        aria-label="Search">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -60,12 +61,13 @@ foreach ($products as $product) {
                     <img class="card-img-top" src="uploads/<?php echo $product['image']; ?>" alt="Product Image" />
                     <div class="card-body p-4">
                         <div class="text-center">
-                            <a href="./index.php?page=product-detail&id_product=<?php echo $product['id_product']; ?>">
-                                <h5 class="fw-bolder"><?php echo $product['name_product']; ?></h5>
+                            <a href="./index.php?page=product-detail&id_product=<?php echo $product['id_product']; ?>"
+                                class="text-decoration-none text-dark">
+                                <h5 class="fw-bolder fs-6"><?php echo $product['name_product']; ?></h5>
                             </a>
 
                             <?php
-                    echo '<span class="text-muted">' . $product['price'] . 'đ</span>';
+                    echo '<span class="text-muted">' . number_format($product['price'], 3, ',', '.') . ' đ</span>';
                     ?>
                         </div>
                     </div>
@@ -74,7 +76,7 @@ foreach ($products as $product) {
                             <form action="./index.php?page=products" method="post">
                                 <input type="hidden" name="id_product" value="<?php echo $product['id_product']; ?>">
                                 <input type="hidden" name="action" value="add-to-cart">
-                                <button type="submit" class="btn btn-outline-dark mt-auto">Add to cart</button>
+                                <button type="submit" class="btn btn-outline-dark mt-auto">Thêm vào giỏ</button>
                             </form>
                         </div>
                     </div>

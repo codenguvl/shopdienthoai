@@ -47,6 +47,14 @@ class Product {
         $stmt->execute();
         return $stmt->rowCount();
     }
+
+    public function getFourByCategory($id_cate) {
+  $query = "SELECT * FROM Product WHERE id_cate = :id_cate ORDER BY RAND() LIMIT 4";
+  $stmt = $this->conn->prepare($query);
+  $stmt->bindParam(':id_cate', $id_cate);
+  $stmt->execute();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
 
 ?>

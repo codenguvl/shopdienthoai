@@ -1,20 +1,30 @@
 <?php
 require_once '../config/db_connection.php';
+require_once '../models/Category.php';
 require_once '../controllers/CategoryController.php';
 
 $categoryController = new CategoryController();
 $categories = $categoryController->getAll();
 
 if (isset($_GET['delete_id'])) {
-  $deleteId = $_GET['delete_id'];
-  $result = $categoryController->delete($deleteId);
+    $deleteId = $_GET['delete_id'];
 
-  if ($result) {
-    echo "<script>window.location.reload();</script>";
-    exit();
-  }
+    try {
+        $result = $categoryController->delete($deleteId);
+
+        if ($result) {
+            echo "<script>window.location.reload();</script>";
+            exit();
+        }
+    } catch (Exception $e) {
+        echo '<div class="container mt-4">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Lỗi!</strong> Không được phép xóa danh mục do còn sản phẩm sử dụng danh mục này.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>';
+    }
 }
-
 ?>
 
 <div class="container mt-4">

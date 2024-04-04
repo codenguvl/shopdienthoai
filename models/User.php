@@ -6,13 +6,42 @@ class User {
         $this->conn = $conn;
     }
 
+    public function isUsernameTaken($username) {
+        $query = "SELECT COUNT(*) AS count FROM user WHERE username = :username";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(array(':username' => $username));
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'] > 0;
+    }
+
+    public function isEmailTaken($email) {
+        $query = "SELECT COUNT(*) AS count FROM user WHERE email = :email";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(array(':email' => $email));
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'] > 0;
+    }
+
+
     public function register($username, $pass, $email, $address) {
+        if ($this->isUsernameTaken($username)) {
+            return false;
+        }
+        if ($this->isEmailTaken($email)) {
+            return false;
+        }
         $query = "INSERT INTO user (username, pass, email, address, role) VALUES (:username, :pass, :email, :address, 'user')";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute(array(':username' => $username, ':pass' => $pass, ':email' => $email, ':address' => $address));
     }
 
     public function createAdmin($username, $pass, $email, $address, $role) {
+        if ($this->isUsernameTaken($username)) {
+            return false;
+        }
+        if ($this->isEmailTaken($email)) {
+            return false;
+        }
         $query = "INSERT INTO user (username, pass, email, address, role) VALUES (:username, :pass, :email, :address, :role)";
         $stmt = $this->conn->prepare($query);
         $result = $stmt->execute(array(':username' => $username, ':pass' => $pass, ':email' => $email, ':address' => $address, ':role' => $role));
@@ -46,14 +75,15 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function update($id_user, $username, $pass, $email, $address) {
-        $query = "UPDATE user SET username = :username, pass = :pass, email = :email, address = :address WHERE id_user = :id_user";
+    public function update($id_user, $username, $pass, $email, $address, $role) {
+        $query = "UPDATE user SET username = :username, pass = :pass, email = :email, address = :address, role = :role WHERE id_user = :id_user";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id_user', $id_user);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':pass', $pass);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':address', $address);
+        $stmt->bindParam(':role', $role);
         $stmt->execute();
         return $stmt->rowCount();
     }

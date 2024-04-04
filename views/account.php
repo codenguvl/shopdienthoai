@@ -8,12 +8,12 @@ $user = $_SESSION['user'];
 
 
 <div class="container p-5">
-    <h1 class="h3 mb-3">My Account</h1>
+    <h1 class="h3 mb-3">Tài khoản của bạn</h1>
     <div class="row">
         <div class="col-12">
             <div class="card account-info">
                 <div class="card-body">
-                    <h5 class="card-title">Account Details</h5>
+                    <h5 class="card-title">Chi tiết tài khoản</h5>
                     <ul class="list-group mb-3">
                         <li class="list-group-item d-flex justify-content-between">
                             <span class="fw-bold">Username:</span>

@@ -1,6 +1,4 @@
 <?php
-require_once '../models/Category.php';
-require_once '../config/db_connection.php';
 
 class CategoryController {
     private $conn;

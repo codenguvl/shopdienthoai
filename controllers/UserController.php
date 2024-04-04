@@ -32,10 +32,10 @@ class UserController {
         return $user->getById($id_user);
     }
 
-    public function update($id_user, $username, $password, $email, $address) {
+    public function update($id_user, $username, $password, $email, $address, $role) {
         global $pdo;
         $user = new User($pdo);
-        return $user->update($id_user, $username, $password, $email, $address);
+        return $user->update($id_user, $username, $password, $email, $address, $role);
     }
 
     public function delete($id_user) {

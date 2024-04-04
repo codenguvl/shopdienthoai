@@ -1,13 +1,17 @@
 <?php
 require_once '../config/db_connection.php';
 require_once '../models/Product.php';
+require_once '../models/Comment.php';
 require_once '../controllers/ProductController.php';
+require_once '../controllers/CommentController.php';
 
 $productController = new ProductController();
 $products = $productController->getAll();
 
 if (isset($_GET['delete_id'])) {
+  $commentController = new CommentController();
   $deleteId = $_GET['delete_id'];
+  $commentController->deleteAllByProductId($deleteId);
   $result = $productController->delete($deleteId);
 
   if ($result) {
@@ -28,7 +32,7 @@ if (isset($_GET['delete_id'])) {
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Image</th>
-                <th scope="col">Description</th>
+                <!-- <th scope="col">Description</th> -->
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -37,15 +41,20 @@ if (isset($_GET['delete_id'])) {
             <tr>
                 <td><?= $product['id_product'] ?></td>
                 <td><?= $product['name_product'] ?></td>
-                <td><?= $product['price'] ?></td>
+                <td><?= number_format($product['price'], 3, ',', '.')  ?> đ</td>
                 <td><img src="../uploads/<?= $product['image'] ?>" alt="<?= $product['name_product'] ?>"
                         style="max-width: 100px;"></td>
-                <td><?= $product['description'] ?></td>
+                <!-- <td> -->
+                <!-- < -->
+                <!-- ?= $product['description'] ?> -->
+                <!-- </td> -->
                 <td>
                     <a href="./?page=edit-product&id=<?= $product['id_product'] ?>"
                         class="btn btn-primary btn-sm">Edit</a>
                     <button type="button" class="btn btn-danger btn-sm" data-id="<?= $product['id_product'] ?>"
                         onclick="deleteProduct(this)">Delete</button>
+                    <a href="./?page=view-comment&id=<?= $product['id_product'] ?>" class="btn btn-info btn-sm">View
+                        Comment</a>
                 </td>
             </tr>
             <?php endforeach; ?>

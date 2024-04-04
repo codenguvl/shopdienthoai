@@ -1,6 +1,4 @@
 <?php
-require_once '../models/Comment.php';
-require_once '../config/db_connection.php';
 
 class CommentController {
     private $conn;
@@ -10,14 +8,14 @@ class CommentController {
         $this->conn = $pdo;
     }
 
-    public function create($content, $id_user, $id_product) {
+    public function create($content, $id_user, $id_product, $username) {
         $comment = new Comment($this->conn);
-        return $comment->create($content, $id_user, $id_product);
+        return $comment->create($content, $id_user, $id_product, $username);
     }
 
-    public function getAll() {
+    public function getAll($id_product) {
         $comment = new Comment($this->conn);
-        return $comment->getAll();
+        return $comment->getAll($id_product);
     }
 
     public function getById($id_comment) {
@@ -33,5 +31,10 @@ class CommentController {
     public function delete($id_comment) {
         $comment = new Comment($this->conn);
         return $comment->delete($id_comment);
+    }
+
+    public function deleteAllByProductId($id_product) {
+        $comment = new Comment($this->conn);
+        return $comment->deleteAllByProductId($id_product);
     }
 }

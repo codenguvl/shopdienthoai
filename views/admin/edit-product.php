@@ -1,5 +1,6 @@
 <?php
 require_once '../models/Product.php';
+require_once '../models/Category.php';
 require_once '../controllers/ProductController.php';
 require_once '../controllers/CategoryController.php';
 
@@ -34,12 +35,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $result = $productController->update($productId, $nameProduct, $price, $image, $description, $category_id);
+    if (empty($nameProduct)) {
+        $errorProductName = "Vui lòng nhập tên sản phẩm";
+    }
 
-    if ($result) {
+    if (empty($price)) {
+        $errorProductPrice = "Vui lòng nhập giá sản phẩm";
+    }
+
+    if (empty($description)) {
+        $errorProductDescription = "Vui lòng nhập mô tả sản phẩm";
+    }
+
+    if (empty($errorProductName) && empty($errorProductPrice) && empty($errorProductImage) && empty($errorProductDescription)) {
+        $result = $productController->update($productId, $nameProduct, $price, $image, $description, $category_id);
+        if ($result) {
         echo "<script>window.location.reload();</script>";
         exit();
     }
+    }
+
 } else if ($productId) {
     $product = $productController->getById($productId);
     if ($product) {
@@ -62,13 +77,19 @@ $categories = $categoryController->getAll();
                 <form id="editProductForm" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="productName">Tên Sản Phẩm:</label>
-                        <input type="text" class="form-control" id="productName" name="productName" required
+                        <input type="text" class="form-control" id="productName" name="productName"
                             value="<?= $nameProduct ?>">
+                        <?php if (isset($errorProductName)) : ?>
+                        <p class="text-danger"><?php echo $errorProductName; ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label for="productPrice">Giá Sản Phẩm:</label>
-                        <input type="number" class="form-control" id="productPrice" name="productPrice" min="0" required
+                        <input type="number" class="form-control" id="productPrice" name="productPrice" min="0"
                             value="<?= $price ?>">
+                        <?php if (isset($errorProductPrice)) : ?>
+                        <p class="text-danger"><?php echo $errorProductPrice; ?></p>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label for="productImage">Ảnh Sản Phẩm:</label>
@@ -76,8 +97,25 @@ $categories = $categoryController->getAll();
                     </div>
                     <div class="form-group">
                         <label for="productDescription">Mô Tả Sản Phẩm:</label>
-                        <textarea class="form-control" id="productDescription" name="productDescription"
-                            rows="3"><?= $description ?></textarea>
+                        <input type="hidden" id="productDescription" name="productDescription">
+                        <div class="form-control" id="text-edit"></div>
+                        <?php if (isset($errorProductDescription)) : ?>
+                        <p class="text-danger"><?php echo $errorProductDescription; ?></p>
+                        <?php endif; ?>
+                        <script>
+                        const quill = new Quill('#text-edit', {
+                            theme: 'snow'
+                        });
+
+                        quill.root.innerHTML = `<?= $description ?>`;
+
+                        const form = document.getElementById('editProductForm');
+                        form.addEventListener('submit', function(event) {
+                            const productDescription = quill.root.innerHTML;
+                            document.getElementById('productDescription').value =
+                                productDescription;
+                        });
+                        </script>
                     </div>
                     <div class="form-group">
                         <label for="productCategory">Danh Mục Sản Phẩm:</label>
